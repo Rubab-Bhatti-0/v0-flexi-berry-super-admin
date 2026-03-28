@@ -1,37 +1,75 @@
 #!/usr/bin/env python3
 import subprocess
 import os
+import glob
 
-# Use absolute path since we know it's the current working directory in v0
-os.chdir('/vercel/share/v0-project') if os.path.isdir('/vercel/share/v0-project') else os.chdir('.')
+print(f'[v0] Current working directory: {os.getcwd()}')
 
-print(f'[v0] Working in: {os.getcwd()}')
+# Find the project by locating app/page.tsx
+project_dir = None
+
+# Search for page.tsx
+search_paths = [
+    '/vercel/share/v0-project',
+    os.path.expanduser('~'),
+    '/home',
+    '/'
+]
+
+for search_root in search_paths:
+    if not os.path.isdir(search_root):
+        continue
+    
+    # Search for page.tsx with reasonable depth
+    for root, dirs, files in os.walk(search_root):
+        # Skip certain directories
+        dirs[:] = [d for d in dirs if d not in ['.git', 'node_modules', '.next', 'dist']]
+        
+        if 'page.tsx' in files and 'app' in root:
+            project_dir = os.path.dirname(root)
+            print(f'[v0] Found project at: {project_dir}')
+            break
+    
+    if project_dir:
+        break
+
+if not project_dir:
+    print('[v0] Error: Could not find project directory')
+    exit(1)
+
+os.chdir(project_dir)
+print(f'[v0] Changed to: {os.getcwd()}')
 
 try:
-    # Add all changes
-    print('[v0] git add -A')
-    subprocess.run(['git', 'add', '-A'], check=False)
+    # Configure git
+    subprocess.run(['git', 'config', 'user.email', 'v0@vercel.com'], check=False)
+    subprocess.run(['git', 'config', 'user.name', 'v0'], check=False)
+    
+    # Stage changes
+    print('[v0] Staging all changes...')
+    subprocess.run(['git', 'add', '-A'], capture_output=True)
+    
+    # Check what files changed
+    status = subprocess.run(['git', 'status', '--short'], capture_output=True, text=True)
+    print(f'[v0] Changes: {status.stdout}')
     
     # Commit
-    print('[v0] git commit...')
-    subprocess.run(['git', 'commit', '-m', 'fix: CSS and build errors'], check=False)
+    print('[v0] Committing changes...')
+    result = subprocess.run(['git', 'commit', '-m', 'Fix: Simplify globals.css and resolve CSS/JSX build errors'], 
+                          capture_output=True, text=True)
+    print(f'[v0] {result.stdout or result.stderr}')
     
-    # Get branch
-    print('[v0] Getting branch...')
+    # Get current branch
     branch_result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], 
                                   capture_output=True, text=True)
     branch = branch_result.stdout.strip()
     print(f'[v0] Branch: {branch}')
     
-    # Push
-    print(f'[v0] Pushing to origin/{branch}')
-    push_result = subprocess.run(['git', 'push', 'origin', branch], 
-                                capture_output=True, text=True)
+    # Push to GitHub
+    print(f'[v0] Pushing...')
+    subprocess.run(['git', 'push', 'origin', branch], check=True)
     
-    if push_result.returncode == 0:
-        print('[v0] ✅ Successfully pushed!')
-    else:
-        print(f'[v0] Push output: {push_result.stderr or push_result.stdout}')
+    print('[v0] Successfully pushed!')
 
 except Exception as e:
     print(f'[v0] Error: {e}')
