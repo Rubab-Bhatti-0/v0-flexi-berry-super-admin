@@ -1,7 +1,43 @@
 @import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-@theme {
-  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+@theme inline {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  
+  --color-teal: #00D4C8;
+  --color-teal-dark: #00A89E;
+  --color-blue: #3B82F6;
+  --color-purple: #A855F7;
+  --color-amber: #F59E0B;
+  --color-red: #EF4444;
+  --color-green: #22C55E;
 }
+
+@layer base {
+  * {
+    @apply scroll-smooth;
+  }
+
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    @apply bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-[#E8EDF5] transition-colors duration-300;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-[#0F1522];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-[#1C2438] rounded-full hover:bg-gray-400 dark:hover:bg-[#252E42];
+}
+
