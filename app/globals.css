@@ -302,7 +302,7 @@ body {
 }
 
 .stat-value {
-  @apply text-2xl font-bold text-gray-900 dark:text-[#E8EDF5] line-height-tight mb-1 font-mono;
+  @apply text-2xl font-bold text-gray-900 dark:text-[#E8EDF5] leading-tight mb-1 font-mono;
 }
 
 .stat-label {
