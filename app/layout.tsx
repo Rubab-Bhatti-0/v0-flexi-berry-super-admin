@@ -1,33 +1,16 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Bricolage_Grotesque, Instrument_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
-const geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: '--font-mono' });
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: '--font-bricolage' });
+const instrument = Instrument_Sans({ subsets: ["latin"], variable: '--font-instrument' });
 
 export const metadata: Metadata = {
-  title: 'FlexiBerry Admin Dashboard',
-  description: 'Professional admin dashboard for FlexiBerry platform',
+  title: 'FlexiBerry | Super Admin Dashboard',
+  description: 'Professional installment platform management dashboard for FlexiBerry',
   generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
 }
 
 export default function RootLayout({
@@ -37,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${bricolage.variable} ${instrument.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
           <Analytics />
