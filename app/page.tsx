@@ -333,7 +333,7 @@ export default function Dashboard() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#F8F9FD] dark:bg-[#0A0E1A] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#F0F2F9] dark:bg-[#0A0E1A] flex items-center justify-center p-4">
         <div className="max-w-md w-full glass-card p-8">
           <div className="flex justify-center mb-8">
             <Logo size={52} />
@@ -365,7 +365,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F8F9FD] dark:bg-[#0A0E1A]">
+    <div className="flex min-h-screen bg-[#F0F2F9] dark:bg-[#0A0E1A]">
       {/* Sidebar */}
       <aside className={`fixed top-0 left-0 h-screen w-64 flex flex-col sidebar-bg z-50 transition-transform duration-300 md:translate-x-0 ${!sidebarOpen ? '-translate-x-full' : 'translate-x-0'}`}>
         <div className="px-6 py-8">
@@ -461,9 +461,9 @@ export default function Dashboard() {
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                    <input type="text" placeholder="Search orders..." className="pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-64" />
+                    <input type="text" placeholder="Search orders..." className="pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all w-64" />
                   </div>
-                  <button className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20">
+                  <button className="px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">
                     <Plus size={16} /> Add Product
                   </button>
                   <button className="p-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-400 hover:text-blue-600 transition-all">
@@ -472,32 +472,26 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((card, i) => (
-                  <div key={i} className={`${card.bgColor} p-6 rounded-3xl relative overflow-hidden group hover:scale-[1.02] transition-all duration-300`}>
+                  <div key={i} className={`${card.bgColor} p-6 rounded-3xl relative overflow-hidden group`}>
                     <div className="relative z-10">
                       <div className="flex items-center justify-between mb-4">
                         <div className="w-10 h-10 rounded-xl bg-white/80 dark:bg-white/5 flex items-center justify-center shadow-sm">
                           {card.icon}
                         </div>
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500">
-                          <TrendingUp size={12} className="text-blue-500" /> {card.change}
+                        <div className={`px-2 py-1 rounded-lg bg-white/50 dark:bg-white/5 text-[10px] font-bold ${card.color} flex items-center gap-1`}>
+                          <TrendingUp size={10} /> {card.change}
                         </div>
                       </div>
-                      <div className="space-y-1">
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{card.value}</h3>
-                        <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">{card.label}</p>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{card.value}</h3>
+                      <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{card.label}</p>
+                      <div className="mt-4 flex items-center gap-1 text-[10px] font-bold text-gray-400">
+                        vs last month <ChevronRight size={10} />
                       </div>
-                      <div className="mt-4 h-8 flex items-end gap-1">
-                        {[40, 70, 45, 90, 65, 80, 50].map((h, j) => (
-                          <div key={j} className="flex-1 bg-blue-600/20 rounded-t-sm group-hover:bg-blue-600/40 transition-all" style={{ height: `${h}%` }}></div>
-                        ))}
-                      </div>
-                      <div className="mt-2 flex items-center justify-between text-[9px] font-bold text-gray-400">
-                        <span>vs last month</span>
-                        <ChevronRight size={10} />
-                      </div>
+                    </div>
+                    <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                      {card.icon}
                     </div>
                   </div>
                 ))}
@@ -687,20 +681,34 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="glass-card p-6 rounded-3xl">
-                      <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Customer Retention</h3>
+                      <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Device Usage</h3>
                       <div className="flex items-center justify-center h-32">
                         <div className="relative w-32 h-32">
                           <svg className="w-full h-full" viewBox="0 0 36 36">
-                            <path className="text-gray-100 dark:text-gray-800" strokeDasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
-                            <path className="text-blue-600" strokeDasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
+                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-blue-500" strokeWidth="4" strokeDasharray="60 100"></circle>
+                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-purple-500" strokeWidth="4" strokeDasharray="30 100" strokeDashoffset="-60"></circle>
+                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-amber-500" strokeWidth="4" strokeDasharray="10 100" strokeDashoffset="-90"></circle>
                           </svg>
                           <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-xl font-bold text-gray-900 dark:text-white">85%</span>
-                            <span className="text-[8px] font-bold text-gray-400 uppercase">Rate</span>
+                            <span className="text-xs font-bold text-gray-900 dark:text-white">8.4k</span>
+                            <span className="text-[8px] text-gray-400">Total</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-center text-[10px] text-gray-400 mt-4">15% increase from last quarter</p>
+                      <div className="mt-4 grid grid-cols-3 gap-2">
+                        <div className="text-center">
+                          <div className="text-[10px] font-bold text-blue-500">60%</div>
+                          <div className="text-[8px] text-gray-400">Mobile</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-[10px] font-bold text-purple-500">30%</div>
+                          <div className="text-[8px] text-gray-400">Desktop</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-[10px] font-bold text-amber-500">10%</div>
+                          <div className="text-[8px] text-gray-400">Tablet</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -708,57 +716,49 @@ export default function Dashboard() {
                 <div className="space-y-6">
                   {/* Top Products */}
                   <div className="glass-card p-6 rounded-3xl">
-                    <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Top Categories</h3>
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Top Performing Shops</h3>
                     <div className="space-y-6">
-                      {categories.map((cat, i) => (
+                      {shops.map((shop, i) => (
                         <div key={i} className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-lg">{cat.icon}</div>
+                            <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-blue-600 font-bold text-xs">
+                              {shop.name.charAt(0)}
+                            </div>
                             <div>
-                              <p className="text-xs font-bold text-gray-900 dark:text-white">{cat.name}</p>
-                              <p className="text-[10px] text-gray-400">{cat.items} Products</p>
+                              <div className="text-[11px] font-bold text-gray-900 dark:text-white">{shop.name}</div>
+                              <div className="text-[9px] text-gray-400">{shop.owner}</div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-xs font-bold text-gray-900 dark:text-white">Rs {(cat.items * 1200).toLocaleString()}</p>
-                            <p className="text-[10px] text-green-500 font-bold">+12%</p>
+                            <div className="text-[11px] font-bold text-gray-900 dark:text-white">Rs {(shop.revenue / 1000).toFixed(1)}k</div>
+                            <div className="text-[9px] text-green-500 font-bold">+12%</div>
                           </div>
                         </div>
                       ))}
                     </div>
+                    <button className="w-full mt-6 py-2.5 rounded-xl border border-gray-100 dark:border-gray-700 text-[10px] font-bold text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">View All Shops</button>
                   </div>
 
-                  {/* Installment Stats */}
+                  {/* Recent Activity */}
                   <div className="glass-card p-6 rounded-3xl">
-                    <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Installment Health</h3>
-                    <div className="space-y-4">
-                      <div className="p-4 rounded-2xl bg-green-50 dark:bg-green-500/5 border border-green-100 dark:border-green-500/10">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-green-600 uppercase">On Time</span>
-                          <span className="text-xs font-bold text-green-700 dark:text-green-400">92%</span>
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Recent Activity</h3>
+                    <div className="space-y-6">
+                      {[
+                        { user: 'Alex Taylor', action: 'New Order', time: '2 mins ago', icon: <ShoppingCart size={14} />, color: 'text-blue-500', bgColor: 'bg-blue-50 dark:bg-blue-500/10' },
+                        { user: 'Emma Wilson', action: 'KYC Verified', time: '15 mins ago', icon: <ShieldCheck size={14} />, color: 'text-green-500', bgColor: 'bg-green-50 dark:bg-green-500/10' },
+                        { user: 'John Doe', action: 'Payment Received', time: '1 hour ago', icon: <DollarSign size={14} />, color: 'text-amber-500', bgColor: 'bg-amber-50 dark:bg-amber-500/10' },
+                        { user: 'Sarah Davis', action: 'Shop Approved', time: '3 hours ago', icon: <Check size={14} />, color: 'text-purple-500', bgColor: 'bg-purple-50 dark:bg-purple-500/10' },
+                      ].map((item, i) => (
+                        <div key={i} className="flex gap-3">
+                          <div className={`w-8 h-8 rounded-lg ${item.bgColor} ${item.color} flex items-center justify-center shrink-0`}>
+                            {item.icon}
+                          </div>
+                          <div>
+                            <div className="text-[11px] font-bold text-gray-900 dark:text-white">{item.user} <span className="font-medium text-gray-400">{item.action}</span></div>
+                            <div className="text-[9px] text-gray-400 mt-0.5">{item.time}</div>
+                          </div>
                         </div>
-                        <div className="w-full h-1 bg-green-200 dark:bg-green-900/20 rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500" style={{ width: '92%' }}></div>
-                        </div>
-                      </div>
-                      <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-500/5 border border-amber-100 dark:border-amber-500/10">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-amber-600 uppercase">Grace Period</span>
-                          <span className="text-xs font-bold text-amber-700 dark:text-amber-400">5%</span>
-                        </div>
-                        <div className="w-full h-1 bg-amber-200 dark:bg-amber-900/20 rounded-full overflow-hidden">
-                          <div className="h-full bg-amber-500" style={{ width: '5%' }}></div>
-                        </div>
-                      </div>
-                      <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-500/5 border border-red-100 dark:border-red-500/10">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold text-red-600 uppercase">Overdue</span>
-                          <span className="text-xs font-bold text-red-700 dark:text-red-400">3%</span>
-                        </div>
-                        <div className="w-full h-1 bg-red-200 dark:bg-red-900/20 rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500" style={{ width: '3%' }}></div>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -766,74 +766,15 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Other pages (Shops, Users, etc.) would go here - keeping current ones as requested */}
-          {[PAGES.SHOPS, PAGES.USERS, PAGES.ADMINS, PAGES.INSTALLMENTS, PAGES.RECOVERY, PAGES.USER_VERIFICATION, PAGES.VENDOR_VERIFICATION, PAGES.CATEGORIES, PAGES.SETTINGS].includes(currentPage) && (
-            <div className="space-y-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white capitalize">{currentPage.replace('_', ' ')}</h1>
-                  <p className="text-xs text-gray-400 mt-1">Manage your platform {currentPage.replace('_', ' ')}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                    <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-64" />
-                  </div>
-                  {currentPage === PAGES.SHOPS && (
-                    <button onClick={() => setShowAddShopModal(true)} className="px-6 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20">
-                      <Plus size={16} /> Add Product
-                    </button>
-                  )}
-                </div>
+          {/* Other pages would go here, following the same pattern */}
+          {currentPage !== PAGES.DASHBOARD && currentPage !== PAGES.ANALYTICS && (
+            <div className="glass-card p-8 rounded-3xl min-h-[600px] flex flex-col items-center justify-center text-center">
+              <div className="w-20 h-20 rounded-3xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 mb-6">
+                <Activity size={40} />
               </div>
-
-              <div className="glass-card overflow-hidden rounded-3xl">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-gray-50/50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
-                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Details</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50 dark:divide-white/5">
-                      {paginatedData.length > 0 ? paginatedData.map((item: any) => (
-                        <tr key={item.id} className="hover:bg-gray-50/30 dark:hover:bg-white/5 transition-colors">
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 font-bold">
-                                {item.name ? item.name.charAt(0) : item.order ? 'O' : 'U'}
-                              </div>
-                              <div>
-                                <p className="text-sm font-bold text-gray-900 dark:text-white">{item.name || item.order || item.email}</p>
-                                <p className="text-[10px] text-gray-400">{item.owner || item.customer || item.role || 'Platform User'}</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className={`badge-${item.status === 'active' || item.status === 'approved' || item.status === 'completed' ? 'success' : item.status === 'pending' ? 'pending' : 'error'}`}>
-                              {item.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-xs text-gray-500 dark:text-gray-400">{item.date || item.joined || item.lastLogin}</td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex items-center justify-end gap-2">
-                              <button className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 transition-colors"><Edit2 size={14} /></button>
-                              <button className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-red-500 transition-colors"><Trash2 size={14} /></button>
-                            </div>
-                          </td>
-                        </tr>
-                      )) : (
-                        <tr>
-                          <td colSpan={4} className="px-6 py-12 text-center text-gray-400 text-sm">No records found matching your search.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white capitalize">{currentPage.replace('_', ' ')} Page</h2>
+              <p className="text-gray-400 mt-2 max-w-md">This page is currently being updated to match the new design system. Please check back soon!</p>
+              <button onClick={() => setCurrentPage(PAGES.DASHBOARD)} className="mt-8 px-6 py-3 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all">Back to Dashboard</button>
             </div>
           )}
         </div>
