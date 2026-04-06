@@ -166,174 +166,11 @@ export default function Dashboard() {
     localStorage.removeItem('isLoggedIn')
   }
 
-  // Shops handlers
-  const handleAddShop = () => {
-    if (newShop.name && newShop.owner) {
-      setShops([...shops, { id: shops.length + 1, ...newShop, revenue: parseInt(newShop.revenue) || 0, date: new Date().toISOString().split('T')[0] }])
-      setNewShop({ name: '', owner: '', revenue: '', status: 'active' })
-      setShowAddShopModal(false)
-    }
-  }
-
-  const handleEditShop = (shop: any) => {
-    setNewShop(shop)
-    setShowEditShopModal(shop.id)
-  }
-
-  const handleSaveEditShop = () => {
-    setShops(shops.map(s => s.id === showEditShopModal ? { ...s, ...newShop, revenue: parseInt(newShop.revenue) || 0 } : s))
-    setNewShop({ name: '', owner: '', revenue: '', status: 'active' })
-    setShowEditShopModal(null)
-  }
-
-  const handleDeleteShop = (id: number) => {
-    setShops(shops.filter(s => s.id !== id))
-  }
-
-  const handleToggleShopStatus = (id: number) => {
-    setShops(shops.map(s => s.id === id ? { ...s, status: s.status === 'active' ? 'suspended' : 'active' } : s))
-  }
-
-  // Admins handlers
-  const handleAddAdmin = () => {
-    if (newAdmin.name && newAdmin.email) {
-      setAdmins([...admins, { id: admins.length + 1, ...newAdmin, status: 'active', lastLogin: 'Never' }])
-      setNewAdmin({ name: '', email: '', role: 'Admin' })
-      setShowAddAdminModal(false)
-    }
-  }
-
-  const handleEditAdmin = (admin: any) => {
-    setNewAdmin(admin)
-    setShowEditAdminModal(admin.id)
-  }
-
-  const handleSaveEditAdmin = () => {
-    setAdmins(admins.map(a => a.id === showEditAdminModal ? { ...a, ...newAdmin } : a))
-    setNewAdmin({ name: '', email: '', role: 'Admin' })
-    setShowEditAdminModal(null)
-  }
-
-  const handleDeleteAdmin = (id: number) => {
-    setAdmins(admins.filter(a => a.id !== id))
-  }
-
-  const handleToggleAdminStatus = (id: number) => {
-    setAdmins(admins.map(a => a.id === id ? { ...a, status: a.status === 'active' ? 'inactive' : 'active' } : a))
-  }
-
-  // Users handlers
-  const handleAddUser = () => {
-    if (newUser.name && newUser.email) {
-      setUsers([...users, { id: users.length + 1, ...newUser, joined: new Date().toISOString().split('T')[0] }])
-      setNewUser({ name: '', email: '', phone: '', status: 'active' })
-      setShowAddUserModal(false)
-    }
-  }
-
-  const handleEditUser = (user: any) => {
-    setNewUser(user)
-    setShowEditUserModal(user.id)
-  }
-
-  const handleSaveEditUser = () => {
-    setUsers(users.map(u => u.id === showEditUserModal ? { ...u, ...newUser } : u))
-    setNewUser({ name: '', email: '', phone: '', status: 'active' })
-    setShowEditUserModal(null)
-  }
-
-  const handleDeleteUser = (id: number) => {
-    setUsers(users.filter(u => u.id !== id))
-  }
-
-  const handleToggleUserStatus = (id: number) => {
-    setUsers(users.map(u => u.id === id ? { ...u, status: u.status === 'active' ? 'suspended' : 'active' } : u))
-  }
-
-  // Categories handlers
-  const handleAddCategory = () => {
-    if (newCategory.name && newCategory.icon) {
-      setCategories([...categories, { id: categories.length + 1, ...newCategory, items: 0, status: 'active' }])
-      setNewCategory({ name: '', icon: '' })
-      setShowAddCategoryModal(false)
-    }
-  }
-
-  const handleDeleteCategory = (id: number) => {
-    setCategories(categories.filter(c => c.id !== id))
-  }
-
-  const handleToggleCategoryStatus = (id: number) => {
-    setCategories(categories.map(c => c.id === id ? { ...c, status: c.status === 'active' ? 'inactive' : 'active' } : c))
-  }
-
-  // KYC handlers
-  const handleApproveKYC = (id: number, type: 'user' | 'vendor') => {
-    if (type === 'user') {
-      setUserVerifications(userVerifications.map(item => item.id === id ? { ...item, status: 'approved' } : item))
-    } else {
-      setVendorVerifications(vendorVerifications.map(item => item.id === id ? { ...item, status: 'approved' } : item))
-    }
-    setViewDocModal({ open: false, item: null, type })
-  }
-
-  const handleRejectKYC = (id: number, type: 'user' | 'vendor') => {
-    if (type === 'user') {
-      setUserVerifications(userVerifications.map(item => item.id === id ? { ...item, status: 'rejected' } : item))
-    } else {
-      setVendorVerifications(vendorVerifications.map(item => item.id === id ? { ...item, status: 'rejected' } : item))
-    }
-    setViewDocModal({ open: false, item: null, type })
-  }
-
-  // Installments handlers
-  const handleMarkInstallmentPaid = (id: number) => {
-    setInstallments(installments.map(inst => inst.id === id && inst.paid < inst.total ? { ...inst, paid: inst.paid + 1 } : inst))
-  }
-
-  const handleSendReminder = (id: number) => {
-    alert('Reminder sent to customer for Order ' + installments.find(i => i.id === id)?.order)
-  }
-
-  // Recovery handlers
-  const handleSendRecoveryLink = (id: number) => {
-    setRecoveryRequests(recoveryRequests.map(req => req.id === id ? { ...req, status: 'verified' } : req))
-  }
-
-  const handleCloseRecoveryRequest = (id: number) => {
-    setRecoveryRequests(recoveryRequests.filter(req => req.id !== id))
-  }
-
-  // Settings handlers
-  const handleSaveSettings = () => {
-    alert('Settings saved successfully!')
-  }
-
-  const filteredShops = shops.filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  const filteredUsers = users.filter(u => u.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  const filteredAdmins = admins.filter(a => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  const filteredInstallments = installments.filter(i => i.order.toLowerCase().includes(searchTerm.toLowerCase()))
-  const filteredRecovery = recoveryRequests.filter(r => r.email.toLowerCase().includes(searchTerm.toLowerCase()))
-
-  const getFilteredData = () => {
-    switch (currentPage) {
-      case PAGES.SHOPS: return filteredShops
-      case PAGES.USERS: return filteredUsers
-      case PAGES.ADMINS: return filteredAdmins
-      case PAGES.INSTALLMENTS: return filteredInstallments
-      case PAGES.RECOVERY: return filteredRecovery
-      default: return []
-    }
-  }
-
-  const filteredData = getFilteredData()
-  const paginatedData = filteredData.slice((currentPageNum - 1) * itemsPerPage, currentPageNum * itemsPerPage)
-
   if (!mounted) return null
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#F0F2F9] dark:bg-[#0A0E1A] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#f0f4ff] dark:bg-[#0A0E1A] flex items-center justify-center p-4">
         <div className="max-w-md w-full glass-card p-8">
           <div className="flex justify-center mb-8">
             <Logo size={52} />
@@ -357,7 +194,7 @@ export default function Dashboard() {
                 <input type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} className="w-full bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="••••••••" />
               </div>
             </div>
-            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/30">Sign In</button>
+            <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/30">Sign In</button>
           </form>
         </div>
       </div>
@@ -365,19 +202,20 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F0F2F9] dark:bg-[#0A0E1A]">
+    <div className="flex min-h-screen bg-[#f0f4ff] dark:bg-[#0A0E1A]">
       {/* Sidebar */}
-      <aside className={`fixed top-0 left-0 h-screen w-64 flex flex-col sidebar-bg z-50 transition-transform duration-300 md:translate-x-0 ${!sidebarOpen ? '-translate-x-full' : 'translate-x-0'}`}>
-        <div className="px-6 py-8">
+      <aside className={`fixed top-0 left-0 h-screen w-64 flex flex-col sidebar-bg z-50 transition-transform duration-300 md:translate-x-0 shadow-2xl ${!sidebarOpen ? '-translate-x-full' : 'translate-x-0'}`}>
+        <div className="px-6 py-8 border-b border-white/5 relative overflow-hidden">
+          <div className="absolute top-[-40px] left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-blue-600/30 blur-[60px] pointer-events-none" />
           <Logo />
         </div>
         
-        <div className="px-4 mb-6">
-          <div className="bg-[#232742] rounded-2xl p-4 flex items-center gap-3 border border-white/5">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">TZ</div>
-            <div>
-              <div className="text-sm font-bold text-white">TechZone</div>
-              <div className="flex items-center gap-1.5">
+        <div className="px-4 py-4 mb-2">
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3 relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20">TZ</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold text-white truncate">TechZone</div>
+              <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                 <span className="text-[10px] text-green-500 font-bold">Active · Verified</span>
               </div>
@@ -385,15 +223,29 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 space-y-8">
+        <div className="flex-1 overflow-y-auto px-4 space-y-6 relative z-10">
           {navSections.map(section => (
             <div key={section.title}>
-              <h3 className="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">{section.title}</h3>
+              <h3 className="px-4 text-[9px] font-bold text-white/30 uppercase tracking-[0.1em] mb-3">{section.title}</h3>
               <div className="space-y-1">
                 {section.items.map(item => (
-                  <button key={item.label} onClick={() => { setCurrentPage(item.id); setCurrentPageNum(1); setSearchTerm(''); }} className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${currentPage === item.id ? 'sidebar-item-active' : 'sidebar-item-inactive'}`}>
-                    <div className="flex items-center gap-3">{item.icon}{item.label}</div>
-                    {item.badge && <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{item.badge}</span>}
+                  <button 
+                    key={item.label} 
+                    onClick={() => { setCurrentPage(item.id); setCurrentPageNum(1); setSearchTerm(''); }} 
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group relative ${currentPage === item.id ? 'sidebar-item-active' : 'sidebar-item-inactive'}`}
+                  >
+                    {currentPage === item.id && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-gradient-to-b from-blue-600 to-purple-600" />}
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${currentPage === item.id ? 'bg-white/15' : 'bg-white/5'}`}>
+                        {item.icon}
+                      </div>
+                      {item.label}
+                    </div>
+                    {item.badge && (
+                      <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded-full min-w-[18px] text-center ${currentPage === item.id ? 'bg-white/25' : 'bg-red-500/80'}`}>
+                        {item.badge}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -401,16 +253,17 @@ export default function Dashboard() {
           ))}
         </div>
 
-        <div className="p-4 space-y-4">
-          <div className="bg-gradient-to-br from-[#232742] to-[#111322] rounded-2xl p-4 border border-white/5">
-            <div className="flex items-center gap-2 text-amber-400 mb-2">
-              <Zap size={16} fill="currentColor" />
-              <span className="text-xs font-bold uppercase tracking-wider">Pro Features</span>
+        <div className="p-4 space-y-4 relative z-10">
+          <div className="bg-gradient-to-br from-blue-600/20 to-purple-600/20 border border-indigo-500/25 rounded-2xl p-4 relative overflow-hidden group">
+            <div className="absolute top-[-20px] right-[-20px] w-20 h-20 rounded-full bg-purple-600/30 blur-2xl pointer-events-none" />
+            <div className="flex items-center gap-2 text-white mb-2">
+              <Zap size={14} className="text-amber-400" fill="currentColor" />
+              <span className="text-xs font-bold">Pro Features</span>
             </div>
-            <p className="text-[10px] text-gray-400 mb-4 leading-relaxed">Unlock advanced analytics, bulk uploads & priority support</p>
-            <button className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-all">Upgrade Plan</button>
+            <p className="text-[11px] text-white/55 mb-4 leading-relaxed">Unlock advanced analytics, bulk uploads & priority support</p>
+            <button className="w-full py-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-[11px] font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all">Upgrade Plan</button>
           </div>
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-colors">
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-colors border-t border-white/5 pt-6">
             <LogOut size={18} />Sign Out
           </button>
         </div>
@@ -423,7 +276,7 @@ export default function Dashboard() {
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden">
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
+            <div className="flex items-center gap-2 text-[11px] font-bold text-gray-400">
               <ShoppingBag size={14} />
               <span>TechZone</span>
               <ChevronRight size={12} />
@@ -441,7 +294,7 @@ export default function Dashboard() {
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-blue-600 transition-all border border-gray-100 dark:border-gray-700">
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-xs font-bold">TZ</div>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-blue-500/20">TZ</div>
           </div>
         </header>
 
@@ -461,12 +314,12 @@ export default function Dashboard() {
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                    <input type="text" placeholder="Search orders..." className="pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500 transition-all w-64" />
+                    <input type="text" placeholder="Search orders..." className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-48 md:w-64" />
                   </div>
-                  <button className="px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">
                     <Plus size={16} /> Add Product
                   </button>
-                  <button className="p-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-400 hover:text-blue-600 transition-all">
+                  <button className="p-2.5 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800">
                     <RefreshCw size={16} />
                   </button>
                 </div>
@@ -474,31 +327,34 @@ export default function Dashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((card, i) => (
-                  <div key={i} className={`${card.bgColor} p-6 rounded-3xl relative overflow-hidden group`}>
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-white/80 dark:bg-white/5 flex items-center justify-center shadow-sm">
-                          {card.icon}
-                        </div>
-                        <div className={`px-2 py-1 rounded-lg bg-white/50 dark:bg-white/5 text-[10px] font-bold ${card.color} flex items-center gap-1`}>
-                          <TrendingUp size={10} /> {card.change}
-                        </div>
+                  <div key={i} className={`p-6 rounded-3xl ${card.bgColor} relative overflow-hidden group hover:scale-[1.02] transition-all cursor-default shadow-sm border border-black/5`}>
+                    <div className="flex justify-between items-start mb-4">
+                      <div className={`w-12 h-12 rounded-2xl bg-white/80 dark:bg-black/20 flex items-center justify-center shadow-sm`}>
+                        {card.icon}
                       </div>
-                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{card.value}</h3>
-                      <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{card.label}</p>
-                      <div className="mt-4 flex items-center gap-1 text-[10px] font-bold text-gray-400">
-                        vs last month <ChevronRight size={10} />
+                      <div className="flex flex-col items-end">
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded-lg bg-white/80 dark:bg-black/20 ${card.color}`}>{card.change}</span>
                       </div>
                     </div>
-                    <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-                      {card.icon}
+                    <div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{card.value}</h3>
+                      <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{card.label}</p>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-black/5 flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-[10px] font-bold text-gray-400">
+                        vs last month <ChevronRight size={10} className="rotate-[-45deg]" />
+                      </div>
+                      <div className="h-8 w-24">
+                        <svg viewBox="0 0 100 30" className="w-full h-full">
+                          <path d="M0,25 Q25,10 50,20 T100,5" fill="none" stroke="currentColor" strokeWidth="2" className={card.color} />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Sales Overview */}
                 <div className="lg:col-span-2 glass-card p-8 rounded-3xl">
                   <div className="flex items-center justify-between mb-8">
                     <div>
@@ -556,19 +412,19 @@ export default function Dashboard() {
                       <Zap size={14} className="text-amber-500" fill="currentColor" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                      <button className="p-4 rounded-2xl bg-blue-600 text-white flex flex-col items-center justify-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">
+                      <button className="p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white flex flex-col items-center justify-center gap-2 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
                         <ShoppingBag size={20} />
                         <span className="text-[10px] font-bold">Add Product</span>
                       </button>
-                      <button className="p-4 rounded-2xl bg-purple-600 text-white flex flex-col items-center justify-center gap-2 hover:bg-purple-700 transition-all shadow-lg shadow-purple-500/20">
+                      <button className="p-4 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-700 text-white flex flex-col items-center justify-center gap-2 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
                         <ShieldCheck size={20} />
                         <span className="text-[10px] font-bold">Review KYC</span>
                       </button>
-                      <button className="p-4 rounded-2xl bg-green-600 text-white flex flex-col items-center justify-center gap-2 hover:bg-green-700 transition-all shadow-lg shadow-green-500/20">
+                      <button className="p-4 rounded-2xl bg-gradient-to-br from-green-600 to-green-700 text-white flex flex-col items-center justify-center gap-2 hover:shadow-lg hover:shadow-green-500/20 transition-all">
                         <Users size={20} />
                         <span className="text-[10px] font-bold">View Buyers</span>
                       </button>
-                      <button className="p-4 rounded-2xl bg-amber-600 text-white flex flex-col items-center justify-center gap-2 hover:bg-amber-700 transition-all shadow-lg shadow-amber-500/20">
+                      <button className="p-4 rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white flex flex-col items-center justify-center gap-2 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
                         <ShoppingCart size={20} />
                         <span className="text-[10px] font-bold">All Orders</span>
                       </button>
@@ -618,7 +474,7 @@ export default function Dashboard() {
                   <button className="px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs font-bold text-gray-600 dark:text-gray-300 flex items-center gap-2">
                     <Download size={16} /> Export Report
                   </button>
-                  <select className="px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold outline-none">
+                  <select className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold outline-none border-none">
                     <option>Last 30 Days</option>
                     <option>Last 90 Days</option>
                     <option>This Year</option>
@@ -685,7 +541,8 @@ export default function Dashboard() {
                       <div className="flex items-center justify-center h-32">
                         <div className="relative w-32 h-32">
                           <svg className="w-full h-full" viewBox="0 0 36 36">
-                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-blue-500" strokeWidth="4" strokeDasharray="60 100"></circle>
+                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-gray-100 dark:stroke-gray-800" strokeWidth="4"></circle>
+                            <circle cx="18" cy="18" r="16" fill="none" className="stroke-blue-500" strokeWidth="4" strokeDasharray="60 100" strokeDashoffset="0"></circle>
                             <circle cx="18" cy="18" r="16" fill="none" className="stroke-purple-500" strokeWidth="4" strokeDasharray="30 100" strokeDashoffset="-60"></circle>
                             <circle cx="18" cy="18" r="16" fill="none" className="stroke-amber-500" strokeWidth="4" strokeDasharray="10 100" strokeDashoffset="-90"></circle>
                           </svg>
@@ -721,7 +578,7 @@ export default function Dashboard() {
                       {shops.map((shop, i) => (
                         <div key={i} className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-blue-600 font-bold text-xs">
+                            <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-blue-600 font-bold text-xs border border-gray-100 dark:border-gray-700">
                               {shop.name.charAt(0)}
                             </div>
                             <div>
@@ -774,7 +631,7 @@ export default function Dashboard() {
               </div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white capitalize">{currentPage.replace('_', ' ')} Page</h2>
               <p className="text-gray-400 mt-2 max-w-md">This page is currently being updated to match the new design system. Please check back soon!</p>
-              <button onClick={() => setCurrentPage(PAGES.DASHBOARD)} className="mt-8 px-6 py-3 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all">Back to Dashboard</button>
+              <button onClick={() => setCurrentPage(PAGES.DASHBOARD)} className="mt-8 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">Back to Dashboard</button>
             </div>
           )}
         </div>

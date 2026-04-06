@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme inline {
-  --font-sans: var(--font-instrument), system-ui, -apple-system, sans-serif;
+  --font-sans: 'DM Sans', var(--font-instrument), system-ui, -apple-system, sans-serif;
   --font-heading: var(--font-bricolage), system-ui, -apple-system, sans-serif;
   
   --color-blue: #2563eb;
@@ -11,10 +11,11 @@
   --color-red: #ef4444;
   --color-green: #10b981;
 
-  /* Sidebar Colors from Photo */
-  --sidebar-bg: #111322;
-  --sidebar-active: #232742;
-  --main-bg: #F0F2F9;
+  /* Colors from the provided layout */
+  --sidebar-gradient-start: #0f172a;
+  --sidebar-gradient-end: #1e1b4b;
+  --main-bg: #f0f4ff;
+  --accent-gradient: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
 @layer base {
@@ -27,8 +28,8 @@
   }
 
   body {
-    /* Light mode uses photo colors, Dark mode uses deep colors */
-    @apply bg-[#F0F2F9] dark:bg-[#0A0E1A] text-gray-900 dark:text-[#E8EDF5] transition-all duration-300;
+    @apply bg-[#f0f4ff] dark:bg-[#0A0E1A] text-gray-900 dark:text-[#E8EDF5] transition-all duration-300;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -49,56 +50,35 @@
   @apply bg-gray-300 dark:bg-[#1C2438] rounded-full hover:bg-gray-400 dark:hover:bg-[#252E42];
 }
 
-/* Glassmorphism Cards */
+/* Glassmorphism Cards - Matching the new aesthetic */
 .glass-card {
   @apply bg-white dark:bg-[#161c2d]/50 backdrop-blur-xl border border-gray-100 dark:border-white/5 rounded-2xl shadow-sm dark:shadow-2xl;
 }
 
-.glass-card-light {
-  @apply bg-[#E6F9F1] dark:bg-green-950/20 border border-green-100 dark:border-green-500/10;
-}
-
-.glass-card-blue {
-  @apply bg-[#EBF2FF] dark:bg-blue-950/20 border border-blue-100 dark:border-blue-500/10;
-}
-
-.glass-card-purple {
-  @apply bg-[#F3EFFF] dark:bg-purple-950/20 border border-purple-100 dark:border-purple-500/10;
-}
-
-.glass-card-amber {
-  @apply bg-[#FFF9EB] dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/10;
-}
-
-/* Sidebar Styles - Always dark as per photo, but slightly adjusted for dark mode */
+/* Sidebar Styles from provided layout */
 .sidebar-bg {
-  @apply bg-[#111322] dark:bg-[#080912];
+  @apply bg-gradient-to-b from-[#0f172a] to-[#1e1b4b] dark:from-[#080912] dark:to-[#0f172a];
 }
 
 .sidebar-item-active {
-  @apply bg-[#232742] text-white shadow-lg;
+  @apply bg-gradient-to-br from-blue-600/35 to-purple-600/25 border border-indigo-500/30 text-white shadow-lg;
 }
 
 .sidebar-item-inactive {
-  @apply text-gray-400 hover:bg-[#232742] hover:text-white;
+  @apply text-white/55 hover:bg-white/5 hover:text-white;
+}
+
+.sidebar-badge-active {
+  @apply bg-white/25 text-white;
+}
+
+.sidebar-badge-inactive {
+  @apply bg-red-500/80 text-white;
 }
 
 /* Smooth Transitions */
 button, a, input, select {
   @apply transition-all duration-200 ease-out;
-}
-
-/* Chart Bars */
-.chart-bar {
-  @apply rounded-t-lg transition-all duration-300 ease-out hover:opacity-80;
-}
-
-.chart-bar-primary {
-  @apply bg-[#3B82F6];
-}
-
-.chart-bar-secondary {
-  @apply bg-[#DBEAFE] dark:bg-blue-900/40;
 }
 
 /* Status Badges */
