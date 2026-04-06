@@ -181,7 +181,7 @@ export default function Dashboard() {
   }
 
   const handleSaveEditShop = () => {
-    setShops(shops.map(s => s.id === showEditShopModal ? { ...s, ...newShop } : s))
+    setShops(shops.map(s => s.id === showEditShopModal ? { ...s, ...newShop, revenue: parseInt(newShop.revenue) || 0 } : s))
     setNewShop({ name: '', owner: '', revenue: '', status: 'active' })
     setShowEditShopModal(null)
   }
