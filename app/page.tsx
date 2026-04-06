@@ -532,28 +532,163 @@ export default function Dashboard() {
           {/* Analytics Page */}
           {currentPage === PAGES.ANALYTICS && (
             <div className="space-y-6">
-              <div><h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics & Reports</h2><p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Detailed platform analytics</p></div>
+              {/* Header with Export and Date Range */}
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Comprehensive insights into your platform performance</p>
+                </div>
+                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                  <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-[#1C2438] dark:hover:bg-[#252E42] text-gray-900 dark:text-[#E8EDF5] font-semibold text-sm transition-colors border border-gray-200 dark:border-[rgba(255,255,255,0.12)]">
+                    <span>📥</span> Export Report
+                  </button>
+                  <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors">
+                    Last 30 Days
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Grid: Revenue Growth + Top Shops + Recent Activity */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Revenue Growth Chart - Spans 2 columns */}
+                <div className="lg:col-span-2 bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Growth</h3>
+                    <div className="flex gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+                        <span className="text-gray-600 dark:text-gray-400">Revenue</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-purple-600"></div>
+                        <span className="text-gray-600 dark:text-gray-400">Profit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-end justify-between h-64 gap-2">
+                    {[45, 60, 40, 70, 50, 65, 75, 55, 80, 60, 85, 70].map((revenue, i) => {
+                      const profit = revenue * 0.6;
+                      return (
+                        <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                          <div className="w-full flex flex-col items-center gap-0.5">
+                            <div className="w-full bg-purple-600 rounded-t transition-opacity hover:opacity-80 cursor-pointer" style={{ height: `${profit}%` }}></div>
+                            <div className="w-full bg-blue-600 rounded-b transition-opacity hover:opacity-80 cursor-pointer" style={{ height: `${revenue - profit}%` }}></div>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-[#5A6478] font-medium mt-2">{'JFMAMJJASOND'[i]}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Top Performing Shops */}
+                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Top Performing Shops</h3>
+                  <div className="space-y-4">
+                    {[
+                      { name: 'Electronics Store', owner: 'John Doe', revenue: 45.0, change: '+12%', avatar: 'E', color: 'bg-blue-100 dark:bg-blue-900' },
+                      { name: 'Fashion Hub', owner: 'Jane Smith', revenue: 32.0, change: '+8%', avatar: 'F', color: 'bg-pink-100 dark:bg-pink-900' },
+                      { name: 'Home Goods', owner: 'Mike Johnson', revenue: 28.0, change: '+5%', avatar: 'H', color: 'bg-amber-100 dark:bg-amber-900' },
+                      { name: 'Tech Solutions', owner: 'Sarah Davis', revenue: 56.0, change: '+15%', avatar: 'T', color: 'bg-purple-100 dark:bg-purple-900' },
+                    ].map((shop, idx) => (
+                      <div key={idx} className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                        <div className={`w-10 h-10 rounded-lg ${shop.color} flex items-center justify-center text-sm font-bold text-gray-900 dark:text-white flex-shrink-0`}>
+                          {shop.avatar}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold text-gray-900 dark:text-white truncate">{shop.name}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{shop.owner}</div>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <div className="text-sm font-bold text-gray-900 dark:text-white">₨{shop.revenue}k</div>
+                          <div className="text-xs text-green-600 dark:text-green-400">{shop.change}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <button className="w-full mt-4 py-2 text-center text-sm font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-900 rounded-lg">
+                      View All Shops
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Grid: User Acquisition + Device Usage + Recent Activity */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-5">
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-6">Traffic Overview</h3>
-                  <div className="flex items-end gap-2 h-32">
-                    {[60, 80, 45, 90, 70, 85, 95].map((height, i) => (
-                      <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                        <div className="w-full bg-teal-500 dark:bg-teal-400 rounded-t transition-opacity hover:opacity-80 cursor-pointer" style={{ height: `${height}%` }}></div>
-                        <div className="text-xs text-gray-500 dark:text-[#5A6478] font-medium">{'SMTWRFS'[i]}</div>
+                {/* User Acquisition */}
+                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">User Acquisition</h3>
+                  <div className="space-y-4">
+                    {[
+                      { label: 'Direct', percentage: 45, color: 'bg-blue-600' },
+                      { label: 'Social Media', percentage: 25, color: 'bg-purple-600' },
+                      { label: 'Referral', percentage: 20, color: 'bg-green-600' },
+                      { label: 'Others', percentage: 10, color: 'bg-amber-600' },
+                    ].map((item, idx) => (
+                      <div key={idx}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.label}</span>
+                          <span className="text-sm font-bold text-gray-900 dark:text-white">{item.percentage}%</span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-200 dark:bg-[#0F1522] rounded-full overflow-hidden">
+                          <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.percentage}%` }}></div>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-5">
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-6">Conversion Rate</h3>
-                  <div className="text-4xl font-bold text-teal-600 dark:text-teal-400 mb-4">3.24%</div>
-                  <div className="h-1.5 bg-gray-200 dark:bg-[#0F1522] rounded-full overflow-hidden"><div className="h-full bg-teal-500 dark:bg-teal-400 rounded-full" style={{ width: '32.4%' }}></div></div>
+
+                {/* Device Usage - Donut Chart */}
+                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Device Usage</h3>
+                  <div className="flex flex-col items-center justify-center py-6">
+                    <div className="relative w-32 h-32 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
+                      <div className="w-28 h-28 rounded-full bg-white dark:bg-[#161C2D] flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">8.4k</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">Total</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-6 space-y-2 w-full">
+                      {[
+                        { label: 'Mobile', percentage: 60, color: 'bg-blue-600' },
+                        { label: 'Desktop', percentage: 30, color: 'bg-purple-600' },
+                        { label: 'Tablet', percentage: 10, color: 'bg-pink-600' },
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 rounded-full ${item.color}`}></div>
+                            <span className="text-gray-600 dark:text-gray-400">{item.label}</span>
+                          </div>
+                          <span className="font-semibold text-gray-900 dark:text-white">{item.percentage}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-5">
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-6">Avg. Order Value</h3>
-                  <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">$284</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400 mt-3">↑ 12.5% from last month</div>
+
+                {/* Recent Activity */}
+                <div className="bg-white dark:bg-[#161C2D] border border-gray-200 dark:border-[rgba(255,255,255,0.07)] rounded-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Recent Activity</h3>
+                  <div className="space-y-4">
+                    {[
+                      { icon: '🛒', user: 'Alex Taylor', action: 'New Order', time: '2 mins ago', color: 'bg-blue-100 dark:bg-blue-900' },
+                      { icon: '✓', user: 'Emma Wilson', action: 'KYC Verified', time: '15 mins ago', color: 'bg-green-100 dark:bg-green-900' },
+                      { icon: '💳', user: 'John Doe', action: 'Payment Received', time: '1 hour ago', color: 'bg-amber-100 dark:bg-amber-900' },
+                      { icon: '✅', user: 'Sarah Davis', action: 'Shop Approved', time: '3 hours ago', color: 'bg-purple-100 dark:bg-purple-900' },
+                    ].map((activity, idx) => (
+                      <div key={idx} className="flex items-start gap-3 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                        <div className={`w-8 h-8 rounded-lg ${activity.color} flex items-center justify-center text-sm flex-shrink-0`}>
+                          {activity.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-semibold text-gray-900 dark:text-white">{activity.user}</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">{activity.action}</div>
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-500 flex-shrink-0 whitespace-nowrap">{activity.time}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
