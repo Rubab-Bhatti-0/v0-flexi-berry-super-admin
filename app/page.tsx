@@ -373,7 +373,7 @@ export default function Dashboard() {
         </div>
         
         <div className="px-4 mb-6">
-          <div className="bg-[#2A2D45] rounded-2xl p-4 flex items-center gap-3">
+          <div className="bg-[#232742] rounded-2xl p-4 flex items-center gap-3 border border-white/5">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">TZ</div>
             <div>
               <div className="text-sm font-bold text-white">TechZone</div>
@@ -402,7 +402,7 @@ export default function Dashboard() {
         </div>
 
         <div className="p-4 space-y-4">
-          <div className="bg-gradient-to-br from-[#2A2D45] to-[#1A1C2E] rounded-2xl p-4 border border-white/5">
+          <div className="bg-gradient-to-br from-[#232742] to-[#111322] rounded-2xl p-4 border border-white/5">
             <div className="flex items-center gap-2 text-amber-400 mb-2">
               <Zap size={16} fill="currentColor" />
               <span className="text-xs font-bold uppercase tracking-wider">Pro Features</span>
@@ -418,7 +418,7 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
-        <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#0A0E1A]/80 backdrop-blur-xl h-16 flex items-center justify-between px-8">
+        <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#0A0E1A]/80 backdrop-blur-xl h-16 flex items-center justify-between px-8 border-b border-gray-100 dark:border-white/5">
           <div className="flex items-center gap-4">
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden">
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}

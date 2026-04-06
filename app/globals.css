@@ -10,6 +10,11 @@
   --color-amber: #fbbf24;
   --color-red: #ef4444;
   --color-green: #10b981;
+
+  /* Sidebar Colors from Photo */
+  --sidebar-bg: #111322;
+  --sidebar-active: #232742;
+  --main-bg: #F0F2F9;
 }
 
 @layer base {
@@ -22,6 +27,7 @@
   }
 
   body {
+    /* Light mode uses photo colors, Dark mode uses deep colors */
     @apply bg-[#F0F2F9] dark:bg-[#0A0E1A] text-gray-900 dark:text-[#E8EDF5] transition-all duration-300;
   }
   
@@ -64,17 +70,17 @@
   @apply bg-[#FFF9EB] dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/10;
 }
 
-/* Sidebar Styles - Dark by default as per photo */
+/* Sidebar Styles - Always dark as per photo, but slightly adjusted for dark mode */
 .sidebar-bg {
-  @apply bg-[#121421] dark:bg-[#080912];
+  @apply bg-[#111322] dark:bg-[#080912];
 }
 
 .sidebar-item-active {
-  @apply bg-[#2A2D45] text-white shadow-lg;
+  @apply bg-[#232742] text-white shadow-lg;
 }
 
 .sidebar-item-inactive {
-  @apply text-gray-400 hover:bg-[#2A2D45] hover:text-white;
+  @apply text-gray-400 hover:bg-[#232742] hover:text-white;
 }
 
 /* Smooth Transitions */
