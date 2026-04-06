@@ -64,7 +64,7 @@
   @apply bg-[#FFF9EB] dark:bg-amber-950/20 border border-amber-100 dark:border-amber-500/10;
 }
 
-/* Sidebar Styles */
+/* Sidebar Styles - Dark by default as per photo */
 .sidebar-bg {
   @apply bg-[#1A1C2E] dark:bg-[#0D0E1A];
 }
