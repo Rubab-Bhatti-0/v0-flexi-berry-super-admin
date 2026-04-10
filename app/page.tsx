@@ -510,14 +510,14 @@ export default function Dashboard() {
                           </div>
                         </div>
                       </div>
-                    <div className="h-72 flex items-end justify-between gap-2">
+                    <div className="h-48 md:h-72 flex items-end justify-between gap-1 md:gap-2">
                       {[40, 55, 45, 70, 60, 85, 75, 90, 80, 95, 85, 100].map((val, i) => (
                         <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                          <div className="w-full relative flex items-end justify-center gap-0.5 h-56">
+                          <div className="w-full relative flex items-end justify-center gap-0.5 h-32 md:h-56">
                             <div className="w-full bg-purple-100 dark:bg-purple-900/20 rounded-t-md transition-all group-hover:bg-purple-200" style={{ height: `${val * 0.6}%` }}></div>
                             <div className="w-full bg-blue-600 rounded-t-md transition-all group-hover:bg-blue-700" style={{ height: `${val}%` }}></div>
                           </div>
-                          <span className="text-[9px] font-bold text-gray-400">{'JFMAMJJASOND'[i]}</span>
+                          <span className="text-[8px] md:text-[9px] font-bold text-gray-400">{'JFMAMJJASOND'[i]}</span>
                         </div>
                       ))}
                     </div>
@@ -586,19 +586,19 @@ export default function Dashboard() {
                     <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6">Top Performing Shops</h3>
                     <div className="space-y-6">
                       {shops.map((shop, i) => (
-                        <div key={i} className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-blue-600 font-bold text-xs border border-gray-100 dark:border-gray-700">
+                        <div key={i} className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                            <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-blue-600 font-bold text-[10px] md:text-xs border border-gray-100 dark:border-gray-700">
                               {shop.name.charAt(0)}
                             </div>
-                            <div>
-                              <div className="text-[11px] font-bold text-gray-900 dark:text-white">{shop.name}</div>
-                              <div className="text-[9px] text-gray-400">{shop.owner}</div>
+                            <div className="min-w-0">
+                              <div className="text-[10px] md:text-[11px] font-bold text-gray-900 dark:text-white truncate">{shop.name}</div>
+                              <div className="text-[8px] md:text-[9px] text-gray-400 truncate">{shop.owner}</div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-[11px] font-bold text-gray-900 dark:text-white">Rs {(shop.revenue / 1000).toFixed(1)}k</div>
-                            <div className="text-[9px] text-green-500 font-bold">+12%</div>
+                          <div className="text-right shrink-0">
+                            <div className="text-[10px] md:text-[11px] font-bold text-gray-900 dark:text-white">Rs {(shop.revenue / 1000).toFixed(1)}k</div>
+                            <div className="text-[8px] md:text-[9px] text-green-500 font-bold">+12%</div>
                           </div>
                         </div>
                       ))}
