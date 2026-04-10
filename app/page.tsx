@@ -170,13 +170,13 @@ export default function Dashboard() {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#f0f4ff] dark:bg-[#0A0E1A] flex items-center justify-center p-4">
-        <div className="max-w-md w-full glass-card p-8">
+      <div className="min-h-screen bg-[#f0f4ff] dark:bg-[#0A0E1A] flex items-center justify-center p-4 md:p-8">
+        <div className="max-w-md w-full glass-card p-6 md:p-10">
           <div className="flex justify-center mb-8">
-            <Logo size={52} />
+            <Logo size={48} />
           </div>
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Sign In</h2>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Admin Sign In</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Enter your credentials to access the dashboard</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-6">
@@ -203,8 +203,16 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen bg-[#f0f4ff] dark:bg-[#0A0E1A]">
+      {/* Sidebar Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`fixed top-0 left-0 h-screen w-64 flex flex-col sidebar-bg z-50 transition-transform duration-300 md:translate-x-0 shadow-2xl ${!sidebarOpen ? '-translate-x-full' : 'translate-x-0'}`}>
+      <aside className={`fixed top-0 left-0 h-screen w-72 md:w-64 flex flex-col sidebar-bg z-50 transition-transform duration-300 md:translate-x-0 shadow-2xl ${!sidebarOpen ? '-translate-x-full' : 'translate-x-0'}`}>
         <div className="px-6 py-8 border-b border-white/5 relative overflow-hidden">
           <div className="absolute top-[-40px] left-1/2 -translate-x-1/2 w-48 h-48 rounded-full bg-blue-600/30 blur-[60px] pointer-events-none" />
           <Logo />
@@ -270,8 +278,8 @@ export default function Dashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
-        <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#0A0E1A]/80 backdrop-blur-xl h-16 flex items-center justify-between px-8 border-b border-gray-100 dark:border-white/5">
+      <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'ml-0'} min-w-0 overflow-hidden`}>
+        <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#0A0E1A]/80 backdrop-blur-xl h-16 flex items-center justify-between px-4 md:px-8 border-b border-gray-100 dark:border-white/5">
           <div className="flex items-center gap-4">
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden">
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -284,8 +292,8 @@ export default function Dashboard() {
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <button className="px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 text-[10px] font-bold flex items-center gap-2 border border-green-100 dark:border-green-500/20">
+          <div className="flex items-center gap-2 md:gap-4">
+            <button className="hidden sm:flex px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 text-[10px] font-bold items-center gap-2 border border-green-100 dark:border-green-500/20">
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>Live
             </button>
             <button className="p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-blue-600 transition-all border border-gray-100 dark:border-gray-700">
@@ -294,34 +302,36 @@ export default function Dashboard() {
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-blue-600 transition-all border border-gray-100 dark:border-gray-700">
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-blue-500/20">TZ</div>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-blue-500/20 shrink-0">TZ</div>
           </div>
         </header>
 
-        <div className="p-8">
+        <div className="p-4 md:p-8">
           {/* Dashboard */}
           {currentPage === PAGES.DASHBOARD && (
             <div className="space-y-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
                 <div>
                   <div className="flex items-center gap-2 text-[10px] font-bold text-green-500 uppercase tracking-widest mb-2">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                     Live Dashboard
                   </div>
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Good morning, TechZone 👋</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Good morning, TechZone 👋</h1>
                   <p className="text-xs text-gray-400 mt-1">Friday, March 13, 2026 · Here's your store overview</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="relative">
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="relative flex-1 md:flex-none">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                    <input type="text" placeholder="Search orders..." className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-48 md:w-64" />
+                    <input type="text" placeholder="Search orders..." className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" />
                   </div>
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">
-                    <Plus size={16} /> Add Product
-                  </button>
-                  <button className="p-2.5 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800">
-                    <RefreshCw size={16} />
-                  </button>
+                  <div className="flex items-center gap-3 w-full md:w-auto">
+                    <button className="flex-1 md:flex-none bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">
+                      <Plus size={16} /> Add Product
+                    </button>
+                    <button className="p-2.5 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 shrink-0">
+                      <RefreshCw size={16} />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -374,20 +384,20 @@ export default function Dashboard() {
                     </div>
                   </div>
                   
-                  <div className="h-64 flex items-end justify-between gap-4 px-2">
+                  <div className="h-64 flex items-end justify-between gap-1.5 md:gap-4 px-1 md:px-2">
                     {analyticsData.salesTrend.map((val, i) => (
                       <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
-                        <div className="w-full relative flex items-end justify-center gap-1 h-48">
+                        <div className="w-full relative flex items-end justify-center gap-0.5 md:gap-1 h-48">
                           <div className="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-lg transition-all group-hover:bg-blue-200 dark:group-hover:bg-blue-900/40" style={{ height: `${analyticsData.lastWeekSales[i]}%` }}></div>
                           <div className="w-full bg-blue-600 rounded-t-lg transition-all group-hover:bg-blue-700 shadow-lg shadow-blue-500/20" style={{ height: `${val}%` }}></div>
                         </div>
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</span>
+                        <span className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-wider">{['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
+                  <div className="mt-8 pt-6 border-t border-gray-50 dark:border-gray-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
                         <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400">This Week <span className="text-gray-900 dark:text-white ml-1">Rs 2.1M</span></span>
@@ -465,16 +475,16 @@ export default function Dashboard() {
           {/* Analytics Page */}
           {currentPage === PAGES.ANALYTICS && (
             <div className="space-y-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
                   <p className="text-xs text-gray-400 mt-1">Comprehensive insights into your platform performance</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <button className="px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs font-bold text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-3">
+                  <button className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-xs font-bold text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2">
                     <Download size={16} /> Export Report
                   </button>
-                  <select className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold outline-none border-none">
+                  <select className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold outline-none border-none">
                     <option>Last 30 Days</option>
                     <option>Last 90 Days</option>
                     <option>This Year</option>
@@ -487,19 +497,19 @@ export default function Dashboard() {
                 <div className="lg:col-span-2 space-y-6">
                   {/* Revenue Chart */}
                   <div className="glass-card p-8 rounded-3xl">
-                    <div className="flex items-center justify-between mb-8">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Growth</h3>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                          <span className="text-[10px] font-bold text-gray-500">Revenue</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
-                          <span className="text-[10px] font-bold text-gray-500">Profit</span>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Growth</h3>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                            <span className="text-[10px] font-bold text-gray-500">Revenue</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+                            <span className="text-[10px] font-bold text-gray-500">Profit</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
                     <div className="h-72 flex items-end justify-between gap-2">
                       {[40, 55, 45, 70, 60, 85, 75, 90, 80, 95, 85, 100].map((val, i) => (
                         <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
@@ -625,13 +635,13 @@ export default function Dashboard() {
 
           {/* Other pages would go here, following the same pattern */}
           {currentPage !== PAGES.DASHBOARD && currentPage !== PAGES.ANALYTICS && (
-            <div className="glass-card p-8 rounded-3xl min-h-[600px] flex flex-col items-center justify-center text-center">
-              <div className="w-20 h-20 rounded-3xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 mb-6">
-                <Activity size={40} />
+            <div className="glass-card p-6 md:p-12 rounded-3xl min-h-[400px] md:min-h-[600px] flex flex-col items-center justify-center text-center">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 mb-6">
+                <Activity size={32} className="md:size-10" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white capitalize">{currentPage.replace('_', ' ')} Page</h2>
-              <p className="text-gray-400 mt-2 max-w-md">This page is currently being updated to match the new design system. Please check back soon!</p>
-              <button onClick={() => setCurrentPage(PAGES.DASHBOARD)} className="mt-8 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">Back to Dashboard</button>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white capitalize">{currentPage.replace('_', ' ')} Page</h2>
+              <p className="text-xs md:text-sm text-gray-400 mt-2 max-w-md px-4">This page is currently being updated to match the new design system. Please check back soon!</p>
+              <button onClick={() => setCurrentPage(PAGES.DASHBOARD)} className="mt-8 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs md:text-sm font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all">Back to Dashboard</button>
             </div>
           )}
         </div>

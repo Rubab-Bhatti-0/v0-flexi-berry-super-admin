@@ -97,3 +97,35 @@ button, a, input, select {
 .badge-info {
   @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400;
 }
+
+/* Responsive Utilities */
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Responsive container padding */
+  .container-responsive {
+    @apply px-4 md:px-6 lg:px-8 mx-auto w-full max-w-7xl;
+  }
+
+  /* Responsive grid for dashboard cards */
+  .dashboard-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6;
+  }
+
+  /* Mobile-first text sizes */
+  .text-responsive-h1 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+  }
+  .text-responsive-h2 {
+    @apply text-xl md:text-2xl lg:text-3xl font-bold;
+  }
+  .text-responsive-body {
+    @apply text-sm md:text-base;
+  }
+}
