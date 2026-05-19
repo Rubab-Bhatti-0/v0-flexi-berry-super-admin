@@ -10,6 +10,7 @@ const PAGES = {
   SHOPS: 'shops',
   ADMINS: 'admins',
   USERS: 'users',
+  USER_HISTORY: 'user_history',
   USER_VERIFICATION: 'user_verification',
   VENDOR_VERIFICATION: 'vendor_verification',
   CATEGORIES: 'categories',
@@ -174,7 +175,7 @@ export default function Dashboard() {
         { id: PAGES.INSTALLMENTS, label: 'Orders', icon: <ShoppingCart size={18} />, badge: 4 },
         { id: PAGES.INSTALLMENTS, label: 'Installments', icon: <FileText size={18} /> },
 	        { id: PAGES.USERS, label: 'Buyers', icon: <Users size={18} /> },
-	        { id: 'user_history', label: 'User History', icon: <Activity size={18} /> },
+	        { id: PAGES.USER_HISTORY, label: 'User History', icon: <Activity size={18} /> },
         { id: PAGES.ANALYTICS, label: 'Analytics', icon: <Activity size={18} /> },
         { id: PAGES.USER_VERIFICATION, label: 'KYC', icon: <ShieldCheck size={18} />, badge: 2 },
         { id: PAGES.CONTACT_MESSAGES, label: 'Messages', icon: <MessageSquare size={18} />, badge: contactMessages.filter(m => m.status === 'unread').length },
@@ -790,7 +791,7 @@ export default function Dashboard() {
           )}
 
           {/* User History Page */}
-          {currentPage === 'user_history' && (
+          {currentPage === PAGES.USER_HISTORY && (
             <div className="space-y-8">
               <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
                 <div>
