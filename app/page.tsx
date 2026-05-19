@@ -85,7 +85,26 @@ export default function Dashboard() {
     { id: 1, name: 'Admin User', email: 'admin@flexiberry.com', role: 'Super Admin', status: 'active', lastLogin: '2024-01-20 14:30' },
     { id: 2, name: 'Support Lead', email: 'support@flexiberry.com', role: 'Admin', status: 'active', lastLogin: '2024-01-20 10:15' },
     { id: 3, name: 'Manager', email: 'manager@flexiberry.com', role: 'Manager', status: 'inactive', lastLogin: '2024-01-19 09:00' },
+    { id: 4, name: 'Technical Lead', email: 'tech@flexiberry.com', role: 'Admin', status: 'active', lastLogin: '2024-01-18 16:45' },
+    { id: 5, name: 'Operations Manager', email: 'ops@flexiberry.com', role: 'Manager', status: 'active', lastLogin: '2024-01-18 11:20' },
   ])
+
+  const [userHistory, setUserHistory] = useState([
+    { id: 1, name: 'Alex Taylor', email: 'alex@email.com', activity: 'Login', details: 'Logged in from Chrome on Windows', date: '2024-05-19 09:15 AM' },
+    { id: 2, name: 'Emma Wilson', email: 'emma@email.com', activity: 'Purchase', details: 'Purchased iPhone 15 Pro Max - Installment Plan', date: '2024-05-19 08:30 AM' },
+    { id: 3, name: 'David Brown', email: 'david@email.com', activity: 'KYC Update', details: 'Uploaded new bank statement', date: '2024-05-18 04:45 PM' },
+    { id: 4, name: 'Lisa Anderson', email: 'lisa@email.com', activity: 'Login', details: 'Logged in from Safari on iPhone', date: '2024-05-18 02:10 PM' },
+    { id: 5, name: 'James Wilson', email: 'james@email.com', activity: 'Payment', details: 'Paid 1st installment for Order #ORD-772', date: '2024-05-18 11:00 AM' },
+    { id: 6, name: 'Sarah Miller', email: 'sarah@email.com', activity: 'Account Created', details: 'New user registration completed', date: '2024-05-17 05:30 PM' },
+  ])
+
+  // Search and Filter states for Admins
+  const [adminSearchTerm, setAdminSearchTerm] = useState('')
+  const [adminRoleFilter, setAdminRoleFilter] = useState('All Roles')
+  const [adminStatusFilter, setAdminStatusFilter] = useState('All Status')
+
+  // Search state for User History
+  const [userHistorySearchTerm, setUserHistorySearchTerm] = useState('')
 
   const [categories, setCategories] = useState([
     { id: 1, name: 'Electronics', icon: '🔌', items: 234, status: 'active' },
@@ -154,7 +173,8 @@ export default function Dashboard() {
         { id: PAGES.SHOPS, label: 'Products', icon: <ShoppingBag size={18} />, badge: 284 },
         { id: PAGES.INSTALLMENTS, label: 'Orders', icon: <ShoppingCart size={18} />, badge: 4 },
         { id: PAGES.INSTALLMENTS, label: 'Installments', icon: <FileText size={18} /> },
-        { id: PAGES.USERS, label: 'Buyers', icon: <Users size={18} /> },
+	        { id: PAGES.USERS, label: 'Buyers', icon: <Users size={18} /> },
+	        { id: 'user_history', label: 'User History', icon: <Activity size={18} /> },
         { id: PAGES.ANALYTICS, label: 'Analytics', icon: <Activity size={18} /> },
         { id: PAGES.USER_VERIFICATION, label: 'KYC', icon: <ShieldCheck size={18} />, badge: 2 },
         { id: PAGES.CONTACT_MESSAGES, label: 'Messages', icon: <MessageSquare size={18} />, badge: contactMessages.filter(m => m.status === 'unread').length },
@@ -643,6 +663,217 @@ export default function Dashboard() {
             </div>
           )}
 
+          {/* Admins Page */}
+          {currentPage === PAGES.ADMINS && (
+            <div className="space-y-8">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Admin Management</h1>
+                  <p className="text-xs text-gray-400 mt-1">Manage platform administrators and their permissions</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="relative flex-1 md:flex-none">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <input 
+                      type="text" 
+                      placeholder="Search admins..." 
+                      value={adminSearchTerm}
+                      onChange={(e) => setAdminSearchTerm(e.target.value)}
+                      className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" 
+                    />
+                  </div>
+                  <select 
+                    value={adminRoleFilter}
+                    onChange={(e) => setAdminRoleFilter(e.target.value)}
+                    className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option>All Roles</option>
+                    <option>Super Admin</option>
+                    <option>Admin</option>
+                    <option>Manager</option>
+                  </select>
+                  <select 
+                    value={adminStatusFilter}
+                    onChange={(e) => setAdminStatusFilter(e.target.value)}
+                    className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option>All Status</option>
+                    <option>active</option>
+                    <option>inactive</option>
+                  </select>
+                  <button 
+                    onClick={() => setShowAddAdminModal(true)}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all"
+                  >
+                    <Plus size={16} />
+                    Add Admin
+                  </button>
+                </div>
+              </div>
+
+              <div className="glass-card rounded-3xl overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-100 dark:border-gray-800">
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Admin</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Role</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Last Login</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50 dark:divide-gray-800/50">
+                      {admins
+                        .filter(admin => {
+                          const matchesSearch = admin.name.toLowerCase().includes(adminSearchTerm.toLowerCase()) || 
+                                              admin.email.toLowerCase().includes(adminSearchTerm.toLowerCase());
+                          const matchesRole = adminRoleFilter === 'All Roles' || admin.role === adminRoleFilter;
+                          const matchesStatus = adminStatusFilter === 'All Status' || admin.status === adminStatusFilter;
+                          return matchesSearch && matchesRole && matchesStatus;
+                        })
+                        .map((admin) => (
+                        <tr key={admin.id} className="hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-[10px] font-bold">
+                                {admin.name.charAt(0)}
+                              </div>
+                              <div>
+                                <div className="text-[11px] font-bold text-gray-900 dark:text-white">{admin.name}</div>
+                                <div className="text-[9px] text-gray-400">{admin.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] font-bold text-gray-900 dark:text-white">{admin.role}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 rounded-lg text-[9px] font-bold ${
+                              admin.status === 'active' 
+                                ? 'bg-green-100 text-green-600 dark:bg-green-500/10' 
+                                : 'bg-red-100 text-red-600 dark:bg-red-500/10'
+                            }`}>
+                              {admin.status.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] text-gray-500 dark:text-gray-400">{admin.lastLogin}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-end gap-2">
+                              <button 
+                                onClick={() => setShowEditAdminModal(admin)}
+                                className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 transition-all"
+                              >
+                                <Edit2 size={14} />
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to delete this admin?')) {
+                                    setAdmins(admins.filter(a => a.id !== admin.id));
+                                  }
+                                }}
+                                className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 transition-all"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* User History Page */}
+          {currentPage === 'user_history' && (
+            <div className="space-y-8">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">User Recent History</h1>
+                  <p className="text-xs text-gray-400 mt-1">Track recent user activities, logins, and purchases</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="relative flex-1 md:flex-none">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <input 
+                      type="text" 
+                      placeholder="Search user activity..." 
+                      value={userHistorySearchTerm}
+                      onChange={(e) => setUserHistorySearchTerm(e.target.value)}
+                      className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" 
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-card rounded-3xl overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-100 dark:border-gray-800">
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">User</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Activity</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Details</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date & Time</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50 dark:divide-gray-800/50">
+                      {userHistory
+                        .filter(history => 
+                          history.name.toLowerCase().includes(userHistorySearchTerm.toLowerCase()) || 
+                          history.email.toLowerCase().includes(userHistorySearchTerm.toLowerCase()) ||
+                          history.activity.toLowerCase().includes(userHistorySearchTerm.toLowerCase()) ||
+                          history.details.toLowerCase().includes(userHistorySearchTerm.toLowerCase())
+                        )
+                        .map((history) => (
+                        <tr key={history.id} className="hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 text-[10px] font-bold">
+                                {history.name.charAt(0)}
+                              </div>
+                              <div>
+                                <div className="text-[11px] font-bold text-gray-900 dark:text-white">{history.name}</div>
+                                <div className="text-[9px] text-gray-400">{history.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 rounded-lg text-[9px] font-bold ${
+                              history.activity === 'Purchase' ? 'bg-green-100 text-green-600 dark:bg-green-500/10' :
+                              history.activity === 'Login' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/10' :
+                              history.activity === 'Payment' ? 'bg-amber-100 text-amber-600 dark:bg-amber-500/10' :
+                              'bg-purple-100 text-purple-600 dark:bg-purple-500/10'
+                            }`}>
+                              {history.activity}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] text-gray-500 dark:text-gray-400">{history.details}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] text-gray-500 dark:text-gray-400">{history.date}</div>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-all">
+                              <Eye size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Contact Messages Page */}
           {currentPage === PAGES.CONTACT_MESSAGES && (
             <div className="space-y-8">
@@ -776,6 +1007,148 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+      {/* Add Admin Modal */}
+      {showAddAdminModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-md rounded-3xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Add New Admin</h3>
+              <button onClick={() => setShowAddAdminModal(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-all">
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const newAdminData = {
+                id: admins.length + 1,
+                name: newAdmin.name,
+                email: newAdmin.email,
+                role: newAdmin.role,
+                status: 'active',
+                lastLogin: 'Never'
+              };
+              setAdmins([...admins, newAdminData]);
+              setShowAddAdminModal(false);
+              setNewAdmin({ name: '', email: '', role: 'Admin' });
+            }} className="p-8 space-y-4">
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Full Name</label>
+                <input 
+                  type="text" 
+                  required
+                  value={newAdmin.name}
+                  onChange={(e) => setNewAdmin({...newAdmin, name: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500" 
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
+                <input 
+                  type="email" 
+                  required
+                  value={newAdmin.email}
+                  onChange={(e) => setNewAdmin({...newAdmin, email: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500" 
+                  placeholder="john@flexiberry.com"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Role</label>
+                <select 
+                  value={newAdmin.role}
+                  onChange={(e) => setNewAdmin({...newAdmin, role: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option>Admin</option>
+                  <option>Super Admin</option>
+                  <option>Manager</option>
+                </select>
+              </div>
+              <div className="pt-4">
+                <button 
+                  type="submit"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all"
+                >
+                  Add Admin Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Admin Modal */}
+      {showEditAdminModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-md rounded-3xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Edit Admin</h3>
+              <button onClick={() => setShowEditAdminModal(null)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-all">
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              setAdmins(admins.map(a => a.id === showEditAdminModal.id ? showEditAdminModal : a));
+              setShowEditAdminModal(null);
+            }} className="p-8 space-y-4">
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Full Name</label>
+                <input 
+                  type="text" 
+                  required
+                  value={showEditAdminModal.name}
+                  onChange={(e) => setShowEditAdminModal({...showEditAdminModal, name: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500" 
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
+                <input 
+                  type="email" 
+                  required
+                  value={showEditAdminModal.email}
+                  onChange={(e) => setShowEditAdminModal({...showEditAdminModal, email: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500" 
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Role</label>
+                <select 
+                  value={showEditAdminModal.role}
+                  onChange={(e) => setShowEditAdminModal({...showEditAdminModal, role: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option>Admin</option>
+                  <option>Super Admin</option>
+                  <option>Manager</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</label>
+                <select 
+                  value={showEditAdminModal.status}
+                  onChange={(e) => setShowEditAdminModal({...showEditAdminModal, status: e.target.value})}
+                  className="w-full mt-1 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option>active</option>
+                  <option>inactive</option>
+                </select>
+              </div>
+              <div className="pt-4">
+                <button 
+                  type="submit"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* View Message Modal */}
       {viewMessageModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
