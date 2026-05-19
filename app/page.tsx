@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar, MessageSquare, Eye as EyeIcon, Unread } from 'lucide-react'
+import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Logo } from '@/components/logo'
 
@@ -16,7 +16,6 @@ const PAGES = {
   INSTALLMENTS: 'installments',
   RECOVERY: 'recovery',
   ANALYTICS: 'analytics',
-  CONTACT_MESSAGES: 'contact_messages',
   SETTINGS: 'settings',
 }
 
@@ -116,20 +115,6 @@ export default function Dashboard() {
     { id: 3, email: 'emma@email.com', username: 'emma_store', method: 'Email', status: 'completed', date: '2024-01-18', expiresAt: 'N/A' },
   ])
 
-  const [contactMessages, setContactMessages] = useState([
-    { id: 1, name: 'John Smith', email: 'john@email.com', subject: 'Product Inquiry', message: 'I would like to know more about your installment plans for electronics.', date: '2024-01-21 14:30', isRead: false },
-    { id: 2, name: 'Sarah Johnson', email: 'sarah@email.com', subject: 'Account Issue', message: 'I am unable to verify my account. Please help me with the KYC process.', date: '2024-01-21 13:15', isRead: true },
-    { id: 3, name: 'Mike Davis', email: 'mike@email.com', subject: 'Payment Problem', message: 'My payment was declined but the amount was deducted from my account.', date: '2024-01-21 11:45', isRead: false },
-    { id: 4, name: 'Emma Wilson', email: 'emma@email.com', subject: 'Shipping Delay', message: 'My order has been delayed for 5 days. Can you provide an update?', date: '2024-01-20 09:20', isRead: true },
-    { id: 5, name: 'Alex Taylor', email: 'alex@email.com', subject: 'Vendor Partnership', message: 'I am interested in becoming a vendor on your platform. What are the requirements?', date: '2024-01-20 08:00', isRead: false },
-    { id: 6, name: 'Lisa Anderson', email: 'lisa@email.com', subject: 'Refund Request', message: 'I would like to request a refund for my recent purchase.', date: '2024-01-19 16:30', isRead: true },
-    { id: 7, name: 'David Brown', email: 'david@email.com', subject: 'Technical Support', message: 'The mobile app keeps crashing when I try to checkout.', date: '2024-01-19 14:00', isRead: false },
-    { id: 8, name: 'Jessica Lee', email: 'jessica@email.com', subject: 'Feature Request', message: 'Can you add a wishlist feature to the platform?', date: '2024-01-19 10:15', isRead: true },
-  ])
-
-  const [selectedMessage, setSelectedMessage] = useState<any>(null)
-  const [showMessageModal, setShowMessageModal] = useState(false)
-
   // Analytics data
   const analyticsData = {
     totalProducts: 284,
@@ -161,7 +146,6 @@ export default function Dashboard() {
         { id: PAGES.INSTALLMENTS, label: 'Orders', icon: <ShoppingCart size={18} />, badge: 4 },
         { id: PAGES.INSTALLMENTS, label: 'Installments', icon: <FileText size={18} /> },
         { id: PAGES.USERS, label: 'Buyers', icon: <Users size={18} /> },
-        { id: PAGES.CONTACT_MESSAGES, label: 'Messages', icon: <MessageSquare size={18} />, badge: contactMessages.filter(m => !m.isRead).length },
         { id: PAGES.ANALYTICS, label: 'Analytics', icon: <Activity size={18} /> },
         { id: PAGES.USER_VERIFICATION, label: 'KYC', icon: <ShieldCheck size={18} />, badge: 2 },
         { id: PAGES.SETTINGS, label: 'Settings', icon: <Activity size={18} /> },
@@ -649,266 +633,8 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Contact Messages Page */}
-          {currentPage === PAGES.CONTACT_MESSAGES && (
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Contact Messages</h1>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage and respond to user inquiries</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-gray-600 dark:text-gray-300">Unread: <span className="text-blue-600 font-bold">{contactMessages.filter(m => !m.isRead).length}</span></span>
-                </div>
-              </div>
-
-              {/* Search and Filter */}
-              <div className="flex flex-col md:flex-row gap-3">
-                <div className="flex-1 relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><Search size={18} /></div>
-                  <input 
-                    type="text" 
-                    value={searchTerm} 
-                    onChange={(e) => { setSearchTerm(e.target.value); setCurrentPageNum(1); }}
-                    placeholder="Search by name, email, or subject..." 
-                    className="w-full bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
-                  />
-                </div>
-              </div>
-
-              {/* Messages Table */}
-              <div className="glass-card rounded-3xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/2.5">
-                        <th className="px-4 md:px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                        <th className="px-4 md:px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                        <th className="px-4 md:px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Email</th>
-                        <th className="px-4 md:px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Subject</th>
-                        <th className="px-4 md:px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Date & Time</th>
-                        <th className="px-4 md:px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-                      {contactMessages
-                        .filter(msg => 
-                          searchTerm === '' || 
-                          msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.subject.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .slice((currentPageNum - 1) * itemsPerPage, currentPageNum * itemsPerPage)
-                        .map((msg) => (
-                        <tr key={msg.id} className={`hover:bg-blue-50/50 dark:hover:bg-blue-500/5 transition-all ${!msg.isRead ? 'bg-blue-50/30 dark:bg-blue-500/5' : ''}`}>
-                          <td className="px-4 md:px-6 py-4">
-                            <div className="flex items-center gap-2">
-                              {!msg.isRead ? (
-                                <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                              ) : (
-                                <div className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-                              )}
-                            </div>
-                          </td>
-                          <td className="px-4 md:px-6 py-4">
-                            <div className="text-sm font-semibold text-gray-900 dark:text-white">{msg.name}</div>
-                          </td>
-                          <td className="px-4 md:px-6 py-4">
-                            <div className="text-sm text-gray-600 dark:text-gray-400">{msg.email}</div>
-                          </td>
-                          <td className="px-4 md:px-6 py-4">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-xs">{msg.subject}</div>
-                          </td>
-                          <td className="px-4 md:px-6 py-4">
-                            <div className="text-sm text-gray-600 dark:text-gray-400">{msg.date}</div>
-                          </td>
-                          <td className="px-4 md:px-6 py-4">
-                            <div className="flex items-center justify-center gap-2">
-                              <button 
-                                onClick={() => { setSelectedMessage(msg); setShowMessageModal(true); }}
-                                className="p-2 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all" 
-                                title="View message"
-                              >
-                                <Eye size={16} />
-                              </button>
-                              <button 
-                                onClick={() => {
-                                  setContactMessages(contactMessages.map(m => 
-                                    m.id === msg.id ? { ...m, isRead: !m.isRead } : m
-                                  ));
-                                }}
-                                className={`p-2 rounded-lg transition-all ${
-                                  msg.isRead 
-                                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                    : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-500/20'
-                                }`}
-                                title={msg.isRead ? 'Mark as unread' : 'Mark as read'}
-                              >
-                                {msg.isRead ? <Check size={16} /> : <Unread size={16} />}
-                              </button>
-                              <button 
-                                onClick={() => setContactMessages(contactMessages.filter(m => m.id !== msg.id))}
-                                className="p-2 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 transition-all" 
-                                title="Delete message"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination */}
-                {Math.ceil(contactMessages.filter(msg => 
-                  searchTerm === '' || 
-                  msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  msg.subject.toLowerCase().includes(searchTerm.toLowerCase())
-                ).length / itemsPerPage) > 1 && (
-                  <div className="flex items-center justify-between px-4 md:px-6 py-4 border-t border-gray-100 dark:border-white/5">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">
-                      Showing {((currentPageNum - 1) * itemsPerPage) + 1} to {Math.min(currentPageNum * itemsPerPage, contactMessages.filter(msg => 
-                        searchTerm === '' || 
-                        msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        msg.subject.toLowerCase().includes(searchTerm.toLowerCase())
-                      ).length)} of {contactMessages.filter(msg => 
-                        searchTerm === '' || 
-                        msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        msg.subject.toLowerCase().includes(searchTerm.toLowerCase())
-                      ).length} messages
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => setCurrentPageNum(Math.max(1, currentPageNum - 1))}
-                        disabled={currentPageNum === 1}
-                        className="p-2 rounded-lg border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                      >
-                        <ChevronLeft size={16} />
-                      </button>
-                      <span className="text-xs font-semibold text-gray-600 dark:text-gray-400 px-3 py-1">
-                        Page {currentPageNum} of {Math.ceil(contactMessages.filter(msg => 
-                          searchTerm === '' || 
-                          msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.subject.toLowerCase().includes(searchTerm.toLowerCase())
-                        ).length / itemsPerPage)}
-                      </span>
-                      <button 
-                        onClick={() => setCurrentPageNum(currentPageNum + 1)}
-                        disabled={currentPageNum >= Math.ceil(contactMessages.filter(msg => 
-                          searchTerm === '' || 
-                          msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.subject.toLowerCase().includes(searchTerm.toLowerCase())
-                        ).length / itemsPerPage)}
-                        className="p-2 rounded-lg border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                      >
-                        <ChevronRight size={16} />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Message Detail Modal */}
-          {showMessageModal && selectedMessage && (
-            <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="glass-card rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <div className="sticky top-0 flex items-center justify-between p-6 border-b border-gray-100 dark:border-white/5 bg-white/50 dark:bg-[#161c2d]/50 backdrop-blur-xl">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Message Details</h2>
-                  <button 
-                    onClick={() => setShowMessageModal(false)}
-                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-all"
-                  >
-                    <X size={20} className="text-gray-600 dark:text-gray-400" />
-                  </button>
-                </div>
-                
-                <div className="p-6 space-y-6">
-                  {/* Sender Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">From</label>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{selectedMessage.name}</p>
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</label>
-                      <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mt-1">{selectedMessage.email}</p>
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date & Time</label>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{selectedMessage.date}</p>
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</label>
-                      <p className={`text-sm font-semibold mt-1 ${selectedMessage.isRead ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'}`}>
-                        {selectedMessage.isRead ? 'Read' : 'Unread'}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Subject */}
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Subject</label>
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{selectedMessage.subject}</p>
-                  </div>
-
-                  {/* Message Body */}
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Message</label>
-                    <div className="mt-3 p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10">
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{selectedMessage.message}</p>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-white/5">
-                    <button 
-                      onClick={() => {
-                        setContactMessages(contactMessages.map(m => 
-                          m.id === selectedMessage.id ? { ...m, isRead: !m.isRead } : m
-                        ));
-                        setSelectedMessage({ ...selectedMessage, isRead: !selectedMessage.isRead });
-                      }}
-                      className={`flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-                        selectedMessage.isRead 
-                          ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                          : 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-500/30'
-                      }`}
-                    >
-                      {selectedMessage.isRead ? 'Mark as Unread' : 'Mark as Read'}
-                    </button>
-                    <button 
-                      onClick={() => {
-                        setContactMessages(contactMessages.filter(m => m.id !== selectedMessage.id));
-                        setShowMessageModal(false);
-                      }}
-                      className="flex-1 px-4 py-2.5 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-500/30 font-semibold text-sm transition-all"
-                    >
-                      Delete Message
-                    </button>
-                    <button 
-                      onClick={() => setShowMessageModal(false)}
-                      className="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 font-semibold text-sm transition-all"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Other pages would go here, following the same pattern */}
-          {currentPage !== PAGES.DASHBOARD && currentPage !== PAGES.ANALYTICS && currentPage !== PAGES.CONTACT_MESSAGES && (
+          {currentPage !== PAGES.DASHBOARD && currentPage !== PAGES.ANALYTICS && (
             <div className="glass-card p-6 md:p-12 rounded-3xl min-h-[400px] md:min-h-[600px] flex flex-col items-center justify-center text-center">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 mb-6">
                 <Activity size={32} className="md:size-10" />
