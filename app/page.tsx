@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar, MessageSquare, Eye as EyeIcon, Unread } from 'lucide-react'
+import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar, MessageSquare, Eye as EyeIcon, Mail as MailIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Logo } from '@/components/logo'
 
@@ -745,7 +745,7 @@ export default function Dashboard() {
                                 }`}
                                 title={msg.isRead ? 'Mark as unread' : 'Mark as read'}
                               >
-                                {msg.isRead ? <Check size={16} /> : <Unread size={16} />}
+                                {msg.isRead ? <Check size={16} /> : <MailIcon size={16} />}
                               </button>
                               <button 
                                 onClick={() => setContactMessages(contactMessages.filter(m => m.id !== msg.id))}
