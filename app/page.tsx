@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar, MessageSquare } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Logo } from '@/components/logo'
+import AnalyticsPage from '@/components/analytics-page'
 
 const PAGES = {
   DASHBOARD: 'dashboard',
@@ -505,6 +506,11 @@ export default function Dashboard() {
 
           {/* Analytics Page */}
           {currentPage === PAGES.ANALYTICS && (
+            <AnalyticsPage />
+          )}
+
+          {/* Old Analytics Grid - Kept as reference */}
+          {false && (
             <div className="space-y-8">
               <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
                 <div>
