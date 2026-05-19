@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar } from 'lucide-react'
+import { Menu, X, Moon, Sun, LogOut, Bell, Search, Plus, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, Download, FileText, Check, AlertCircle, Lock, User, Mail, ShieldCheck, ShoppingBag, Pause, Play, Save, XCircle, TrendingUp, BarChart3, Users, ShoppingCart, DollarSign, Activity, RefreshCw, Zap, PieChart, Calendar, MessageSquare } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Logo } from '@/components/logo'
 
@@ -17,6 +17,7 @@ const PAGES = {
   RECOVERY: 'recovery',
   ANALYTICS: 'analytics',
   SETTINGS: 'settings',
+  CONTACT_MESSAGES: 'contact_messages',
 }
 
 export default function Dashboard() {
@@ -115,6 +116,14 @@ export default function Dashboard() {
     { id: 3, email: 'emma@email.com', username: 'emma_store', method: 'Email', status: 'completed', date: '2024-01-18', expiresAt: 'N/A' },
   ])
 
+  const [contactMessages, setContactMessages] = useState([
+    { id: 1, name: 'John Doe', email: 'john@example.com', subject: 'Inquiry about products', message: 'I would like to know more about your electronics section and if you have any upcoming sales on laptops.', date: '2024-05-18 10:30 AM', status: 'unread' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', subject: 'Shipping delay', message: 'My order #12345 has been delayed for 3 days. Can you please check the status?', date: '2024-05-17 02:15 PM', status: 'read' },
+    { id: 3, name: 'Mike Johnson', email: 'mike@example.com', subject: 'Partnership opportunity', message: 'We are interested in a vendor partnership. Who should we contact for this?', date: '2024-05-16 09:45 AM', status: 'unread' },
+    { id: 4, name: 'Sarah Wilson', email: 'sarah@example.com', subject: 'Account access issue', message: 'I am unable to log in to my buyer account. I have tried resetting my password but no luck.', date: '2024-05-15 04:20 PM', status: 'read' },
+  ])
+  const [viewMessageModal, setViewMessageModal] = useState<any>(null)
+
   // Analytics data
   const analyticsData = {
     totalProducts: 284,
@@ -148,6 +157,7 @@ export default function Dashboard() {
         { id: PAGES.USERS, label: 'Buyers', icon: <Users size={18} /> },
         { id: PAGES.ANALYTICS, label: 'Analytics', icon: <Activity size={18} /> },
         { id: PAGES.USER_VERIFICATION, label: 'KYC', icon: <ShieldCheck size={18} />, badge: 2 },
+        { id: PAGES.CONTACT_MESSAGES, label: 'Messages', icon: <MessageSquare size={18} />, badge: contactMessages.filter(m => m.status === 'unread').length },
         { id: PAGES.SETTINGS, label: 'Settings', icon: <Activity size={18} /> },
       ],
     },
@@ -633,8 +643,128 @@ export default function Dashboard() {
             </div>
           )}
 
+          {/* Contact Messages Page */}
+          {currentPage === PAGES.CONTACT_MESSAGES && (
+            <div className="space-y-8">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Contact Messages</h1>
+                  <p className="text-xs text-gray-400 mt-1">Manage and respond to user inquiries</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="relative flex-1 md:flex-none">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <input 
+                      type="text" 
+                      placeholder="Search messages..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" 
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-card rounded-3xl overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-100 dark:border-gray-800">
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">User</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Subject</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Message</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date & Time</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50 dark:divide-gray-800/50">
+                      {contactMessages
+                        .filter(m => 
+                          m.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          m.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          m.subject.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        .map((msg) => (
+                        <tr key={msg.id} className={`hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors ${msg.status === 'unread' ? 'bg-blue-50/30 dark:bg-blue-500/5' : ''}`}>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-[10px] font-bold">
+                                {msg.name.charAt(0)}
+                              </div>
+                              <div>
+                                <div className="text-[11px] font-bold text-gray-900 dark:text-white">{msg.name}</div>
+                                <div className="text-[9px] text-gray-400">{msg.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] font-bold text-gray-900 dark:text-white">{msg.subject}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] text-gray-500 dark:text-gray-400 truncate max-w-[200px]">{msg.message}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-[11px] text-gray-500 dark:text-gray-400">{msg.date}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 rounded-lg text-[9px] font-bold ${
+                              msg.status === 'read' 
+                                ? 'bg-green-100 text-green-600 dark:bg-green-500/10' 
+                                : 'bg-blue-100 text-blue-600 dark:bg-blue-500/10'
+                            }`}>
+                              {msg.status.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-end gap-2">
+                              <button 
+                                onClick={() => {
+                                  setViewMessageModal(msg);
+                                  if (msg.status === 'unread') {
+                                    setContactMessages(contactMessages.map(m => m.id === msg.id ? { ...m, status: 'read' } : m));
+                                  }
+                                }}
+                                className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 transition-all"
+                                title="View Message"
+                              >
+                                <Eye size={14} />
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  setContactMessages(contactMessages.map(m => 
+                                    m.id === msg.id ? { ...m, status: m.status === 'read' ? 'unread' : 'read' } : m
+                                  ));
+                                }}
+                                className="p-2 rounded-lg hover:bg-amber-50 dark:hover:bg-amber-500/10 text-amber-600 transition-all"
+                                title={msg.status === 'read' ? "Mark as Unread" : "Mark as Read"}
+                              >
+                                {msg.status === 'read' ? <Mail size={14} /> : <Check size={14} />}
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to delete this message?')) {
+                                    setContactMessages(contactMessages.filter(m => m.id !== msg.id));
+                                  }
+                                }}
+                                className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 transition-all"
+                                title="Delete Message"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Other pages would go here, following the same pattern */}
-          {currentPage !== PAGES.DASHBOARD && currentPage !== PAGES.ANALYTICS && (
+          {currentPage !== PAGES.DASHBOARD && currentPage !== PAGES.ANALYTICS && currentPage !== PAGES.CONTACT_MESSAGES && (
             <div className="glass-card p-6 md:p-12 rounded-3xl min-h-[400px] md:min-h-[600px] flex flex-col items-center justify-center text-center">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 mb-6">
                 <Activity size={32} className="md:size-10" />
@@ -646,6 +776,50 @@ export default function Dashboard() {
           )}
         </div>
       </main>
+      {/* View Message Modal */}
+      {viewMessageModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-2xl rounded-3xl overflow-hidden animate-in fade-in zoom-in duration-300">
+            <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Message Details</h3>
+              <button onClick={() => setViewMessageModal(null)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 transition-all">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">From</label>
+                  <div className="mt-1 text-sm font-bold text-gray-900 dark:text-white">{viewMessageModal.name}</div>
+                  <div className="text-xs text-gray-500">{viewMessageModal.email}</div>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date & Time</label>
+                  <div className="mt-1 text-sm font-bold text-gray-900 dark:text-white">{viewMessageModal.date}</div>
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Subject</label>
+                <div className="mt-1 text-sm font-bold text-gray-900 dark:text-white">{viewMessageModal.subject}</div>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Message</label>
+                <div className="mt-2 p-4 rounded-2xl bg-gray-50 dark:bg-white/5 text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                  {viewMessageModal.message}
+                </div>
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex justify-end">
+              <button 
+                onClick={() => setViewMessageModal(null)}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
